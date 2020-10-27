@@ -1,76 +1,151 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import Matter from "matter-js";
+import React, { useEffect, useState, useRef } from "react"
+import Matter from "matter-js"
 
-class Scene extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+const STATIC_DENSITY = 15
+const PARTICLE_SIZE = 6
+const PARTICLE_BOUNCYNESS = 0.9
+
+const MatterStepTwo = () => {
+  const boxRef = useRef(null)
+  const canvasRef = useRef(null)
+
+  const [constraints, setContraints] = useState()
+  const [scene, setScene] = useState()
+
+  const [someStateValue, setSomeStateValue] = useState(false)
+
+  const handleResize = () => {
+    setContraints(boxRef.current.getBoundingClientRect())
   }
 
-  componentDidMount() {
-    var Engine = Matter.Engine,
-      Render = Matter.Render,
-      World = Matter.World,
-      Bodies = Matter.Bodies,
-      Mouse = Matter.Mouse,
-      MouseConstraint = Matter.MouseConstraint;
+  const handleClick = () => {
+    setSomeStateValue(!someStateValue)
+  }
 
-    var engine = Engine.create({
-      // positionIterations: 20
-    });
+  useEffect(() => {
+    let Engine = Matter.Engine
+    let Render = Matter.Render
+    let World = Matter.World
+    let Bodies = Matter.Bodies
 
-    var render = Render.create({
-      element: this.refs.scene,
+    let engine = Engine.create({})
+
+    let render = Render.create({
+      element: boxRef.current,
       engine: engine,
+      canvas: canvasRef.current,
       options: {
-        width: 600,
-        height: 600,
-        wireframes: false
-      }
-    });
-
-    var ballA = Bodies.circle(210, 100, 30, { restitution: 0.5 });
-    var ballB = Bodies.circle(110, 50, 30, { restitution: 0.5 });
-    World.add(engine.world, [
-      // walls
-      Bodies.rectangle(200, 0, 600, 50, { isStatic: true }),
-      Bodies.rectangle(200, 600, 600, 50, { isStatic: true }),
-      Bodies.rectangle(260, 300, 50, 600, { isStatic: true }),
-      Bodies.rectangle(0, 300, 50, 600, { isStatic: true })
-    ]);
-
-    World.add(engine.world, [ballA, ballB]);
-
-    // add mouse control
-    var mouse = Mouse.create(render.canvas),
-      mouseConstraint = MouseConstraint.create(engine, {
-        mouse: mouse,
-        constraint: {
-          stiffness: 0.2,
-          render: {
-            visible: false
-          }
-        }
-      });
-
-    World.add(engine.world, mouseConstraint);
-
-    Matter.Events.on(mouseConstraint, "mousedown", function(event) {
-      World.add(engine.world, Bodies.circle(150, 50, 30, { restitution: 0.7 }));
-    });
-
-    Engine.run(engine);
-
-    Render.run(render);
-
-    this.setState({
-        render: render
+        background: "rgba(0, 255, 0, 0.15)",
+        wireframes: false,
+      },
     })
-  }
 
-  render() {
-    return <div ref="scene" />;
-  }
+    const floor = Bodies.rectangle(0, 0, 0, STATIC_DENSITY, {
+      isStatic: true,
+      render: {
+        fillStyle: "blue",
+      },
+    })
+
+    const ball = Bodies.circle(150, 0, 10, {
+      restitution: 0.9,
+      render: {
+        fillStyle: "yellow",
+      },
+    })
+
+    World.add(engine.world, [floor, ball])
+
+    Engine.run(engine)
+    Render.run(render)
+
+    setContraints(boxRef.current.getBoundingClientRect())
+    setScene(render)
+
+    window.addEventListener("resize", handleResize)
+  }, [])
+
+
+  useEffect(() => {
+    return () => {
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [])
+
+
+  useEffect(() => {
+    if (constraints) {
+      let {width, height} = constraints
+
+      // Dynamically update canvas and bounds
+      scene.bounds.max.x = width
+      scene.bounds.max.y = height
+      scene.options.width = width
+      scene.options.height = height
+      scene.canvas.width = width
+      scene.canvas.height = height
+
+      // Dynamically update floor
+      const floor = scene.engine.world.bodies[0]
+      
+      Matter.Body.setPosition(floor, {
+        x: width / 2,
+        y: height + STATIC_DENSITY / 2,
+      })
+      
+      Matter.Body.setVertices(floor, [
+        { x: 0, y: height },
+        { x: width, y: height },
+        { x: width, y: height + STATIC_DENSITY },
+        { x: 0, y: height + STATIC_DENSITY },
+      ])
+    }
+  }, [scene, constraints])
+
+  useEffect(() => {
+    // Add a new "ball" everytime `someStateValue` changes
+    if (scene) {
+      let { width } = constraints
+      let randomX = Math.floor(Math.random() * -width) + width
+      Matter.World.add(
+        scene.engine.world,
+        Matter.Bodies.circle(randomX, -PARTICLE_SIZE, PARTICLE_SIZE, {
+          restitution: PARTICLE_BOUNCYNESS,
+        })
+      )
+    }
+  }, [someStateValue])
+
+
+  return (
+    <div
+      ref={boxRef}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%"
+      }}
+    > 
+      <canvas ref={canvasRef}/>
+      <button
+          style={{
+            cursor: "pointer",
+            display: "block",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "40px",
+            textAlign: "center",
+          }}
+          onClick={() => handleClick()}
+        >
+          Balls
+        </button>
+    </div>
+  )
 }
-export default Scene;
+
+export default MatterStepTwo
