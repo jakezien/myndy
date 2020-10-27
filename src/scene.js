@@ -1,11 +1,17 @@
 import React, { useEffect, useState, useRef } from "react"
 import Matter from "matter-js"
+import MatterAttractors from "matter-attractors"
 
 const STATIC_DENSITY = 15
 const PARTICLE_SIZE = 6
 const PARTICLE_BOUNCYNESS = 0.9
 
-const MatterStepTwo = () => {
+
+const Scene = () => {
+
+  Matter.use(MatterAttractors)
+
+
   const boxRef = useRef(null)
   const canvasRef = useRef(null)
 
@@ -22,13 +28,26 @@ const MatterStepTwo = () => {
     setSomeStateValue(!someStateValue)
   }
 
+  const setupSimulation = () => {
+
+  }
+
   useEffect(() => {
     let Engine = Matter.Engine
+    let Events = Matter.Events
     let Render = Matter.Render
     let World = Matter.World
+    let Body = Matter.Body
     let Bodies = Matter.Bodies
+    let Mouse = Matter.Mouse
+    let Common = Matter.Common
+    let Vertices = Matter.Vertices
+    let Svg = Matter.Svg
 
-    let engine = Engine.create({})
+    let engine = Engine.create()
+
+    let world = engine.world;
+    world.gravity.scale = 0;
 
     let render = Render.create({
       element: boxRef.current,
@@ -47,14 +66,68 @@ const MatterStepTwo = () => {
       },
     })
 
-    const ball = Bodies.circle(150, 0, 10, {
-      restitution: 0.9,
+    let heartPath = '<path d="M3860.61,2344.93C3864.34,2350.03 3870.23,2353.04 3876.5,2353.04C3882.77,2353.04 3888.66,2350.03 3892.39,2344.93C3961.26,2249.35 4077.55,2253.59 4137.97,2309.7C4203.35,2370.4 4203.35,2491.8 4137.97,2613.2C4097.01,2694.7 3998.44,2792.43 3907.89,2855.57C3888.94,2868.58 3864.06,2868.58 3845.11,2855.57C3754.56,2792.43 3655.99,2694.7 3615.03,2613.2C3549.66,2491.8 3549.66,2370.4 3615.03,2309.7C3675.45,2253.59 3791.74,2249.35 3860.61,2344.93Z" style="fill:white;"/>'
+    let heartVertices = Svg.pathToVertices(heartPath, 30)
+
+    World.add(world, Bodies.fromVertices(400, 80, [heartVertices], {
+        render: {
+            fillStyle: '#fff',
+            strokeStyle: '#000',
+            lineWidth: 0
+        }
+    }, true));
+
+    const earth = Bodies.polygon(  
+      render.options.width / 2,
+      render.options.height / 2,
+      13,
+      100, 
+      {
+      isStatic: true,
+
+      plugin: {
+        attractors: [
+          function(bodyA, bodyB) {
+            return {
+              x: (bodyA.position.x - bodyB.position.x) * 1e-6,
+              y: (bodyA.position.y - bodyB.position.y) * 1e-6,
+            };
+          }
+        ]
+      },
+
       render: {
-        fillStyle: "yellow",
+        fillStyle: "blue",
       },
     })
 
-    World.add(engine.world, [floor, ball])
+
+    World.add(world, earth)
+
+    for (var i = 0; i < 300; i += 1) {
+      var body = Bodies.circle(
+        Common.random(0, render.options.width), 
+        Common.random(0, render.options.height),
+        8
+      );
+
+      World.add(world, body);
+    }
+
+    var mouse = Mouse.create(render.canvas);
+
+    Events.on(engine, 'afterUpdate', function() {
+        if (!mouse.position.x) {
+          return;
+        }
+
+        // smoothly move the attractor body towards the mouse
+        Body.translate(earth, {
+            x: (mouse.position.x - earth.position.x) * 0.25,
+            y: (mouse.position.y - earth.position.y) * 0.25
+        });
+    });
+
 
     Engine.run(engine)
     Render.run(render)
@@ -86,35 +159,21 @@ const MatterStepTwo = () => {
       scene.canvas.height = height
 
       // Dynamically update floor
-      const floor = scene.engine.world.bodies[0]
+      // const floor = scene.engine.world.bodies[0]
       
-      Matter.Body.setPosition(floor, {
-        x: width / 2,
-        y: height + STATIC_DENSITY / 2,
-      })
+      // Matter.Body.setPosition(floor, {
+      //   x: width / 2,
+      //   y: height + STATIC_DENSITY / 2,
+      // })
       
-      Matter.Body.setVertices(floor, [
-        { x: 0, y: height },
-        { x: width, y: height },
-        { x: width, y: height + STATIC_DENSITY },
-        { x: 0, y: height + STATIC_DENSITY },
-      ])
+      // Matter.Body.setVertices(floor, [
+      //   { x: 0, y: height },
+      //   { x: width, y: height },
+      //   { x: width, y: height + STATIC_DENSITY },
+      //   { x: 0, y: height + STATIC_DENSITY },
+      // ])
     }
   }, [scene, constraints])
-
-  useEffect(() => {
-    // Add a new "ball" everytime `someStateValue` changes
-    if (scene) {
-      let { width } = constraints
-      let randomX = Math.floor(Math.random() * -width) + width
-      Matter.World.add(
-        scene.engine.world,
-        Matter.Bodies.circle(randomX, -PARTICLE_SIZE, PARTICLE_SIZE, {
-          restitution: PARTICLE_BOUNCYNESS,
-        })
-      )
-    }
-  }, [someStateValue])
 
 
   return (
@@ -129,23 +188,8 @@ const MatterStepTwo = () => {
       }}
     > 
       <canvas ref={canvasRef}/>
-      <button
-          style={{
-            cursor: "pointer",
-            display: "block",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "40px",
-            textAlign: "center",
-          }}
-          onClick={() => handleClick()}
-        >
-          Balls
-        </button>
     </div>
   )
 }
 
-export default MatterStepTwo
+export default Scene
