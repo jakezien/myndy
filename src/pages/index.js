@@ -1,5 +1,6 @@
 import React from "react"
+import Scene from "../Scene"
 
 export default function Home() {
-  return <div>Hello world!</div>
+  return <div><Scene/></div>
 }
