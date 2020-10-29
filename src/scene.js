@@ -1,16 +1,24 @@
 import React, { useEffect, useState, useRef } from "react"
+import { useStaticQuery, graphql } from "gatsby"
 import Matter from "matter-js"
 import MatterAttractors from "matter-attractors"
+
+window.decomp = require('poly-decomp');
 
 const STATIC_DENSITY = 15
 const PARTICLE_SIZE = 6
 const PARTICLE_BOUNCYNESS = 0.9
+const HEART_SVG_PATH = 'M75.056,18.917c0.95,1.284 2.451,2.043 4.048,2.043c1.598,-0 3.098,-0.759 4.049,-2.043c17.545,-24.076 47.172,-23.008 62.565,-8.874c16.657,15.289 16.657,45.869 0,76.448c-10.435,20.53 -35.547,45.147 -58.616,61.051c-4.828,3.277 -11.167,3.277 -15.995,0c-23.069,-15.904 -48.181,-40.521 -58.616,-61.051c-16.655,-30.579 -16.655,-61.159 -0,-76.448c15.393,-14.134 45.019,-15.202 62.565,8.874Z'
 
+const createHeartVertices = (length = 15) => {
+  let heartSvgPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  heartSvgPath.setAttribute("d", HEART_SVG_PATH);
+  return Matter.Svg.pathToVertices(heartSvgPath, length)
+}
 
 const Scene = () => {
 
   Matter.use(MatterAttractors)
-
 
   const boxRef = useRef(null)
   const canvasRef = useRef(null)
@@ -28,10 +36,6 @@ const Scene = () => {
     setSomeStateValue(!someStateValue)
   }
 
-  const setupSimulation = () => {
-
-  }
-
   useEffect(() => {
     let Engine = Matter.Engine
     let Events = Matter.Events
@@ -41,6 +45,7 @@ const Scene = () => {
     let Bodies = Matter.Bodies
     let Mouse = Matter.Mouse
     let Common = Matter.Common
+    let Constraint = Matter.Constraint
     let Vertices = Matter.Vertices
     let Svg = Matter.Svg
 
@@ -54,10 +59,17 @@ const Scene = () => {
       engine: engine,
       canvas: canvasRef.current,
       options: {
-        background: "rgba(0, 255, 0, 0.15)",
+        background: 'transparent',
         wireframes: false,
       },
     })
+
+    let attractorFunction = (bodyA, bodyB) => {
+      return {
+        x: (bodyA.position.x - bodyB.position.x) * 1e-6,
+        y: (bodyA.position.y - bodyB.position.y) * 1e-6,
+      };
+    }
 
     const floor = Bodies.rectangle(0, 0, 0, STATIC_DENSITY, {
       isStatic: true,
@@ -66,69 +78,60 @@ const Scene = () => {
       },
     })
 
-    let heartPath = '<path d="M3860.61,2344.93C3864.34,2350.03 3870.23,2353.04 3876.5,2353.04C3882.77,2353.04 3888.66,2350.03 3892.39,2344.93C3961.26,2249.35 4077.55,2253.59 4137.97,2309.7C4203.35,2370.4 4203.35,2491.8 4137.97,2613.2C4097.01,2694.7 3998.44,2792.43 3907.89,2855.57C3888.94,2868.58 3864.06,2868.58 3845.11,2855.57C3754.56,2792.43 3655.99,2694.7 3615.03,2613.2C3549.66,2491.8 3549.66,2370.4 3615.03,2309.7C3675.45,2253.59 3791.74,2249.35 3860.61,2344.93Z" style="fill:white;"/>'
-    let heartVertices = Svg.pathToVertices(heartPath, 30)
 
-    World.add(world, Bodies.fromVertices(400, 80, [heartVertices], {
-        render: {
-            fillStyle: '#fff',
-            strokeStyle: '#000',
-            lineWidth: 0
-        }
-    }, true));
-
-    const earth = Bodies.polygon(  
-      render.options.width / 2,
-      render.options.height / 2,
-      13,
-      100, 
-      {
+    const heart = Matter.Bodies.fromVertices(200, 200, createHeartVertices(), {
       isStatic: true,
-
       plugin: {
-        attractors: [
-          function(bodyA, bodyB) {
-            return {
-              x: (bodyA.position.x - bodyB.position.x) * 1e-6,
-              y: (bodyA.position.y - bodyB.position.y) * 1e-6,
-            };
-          }
-        ]
+        attractors: [attractorFunction]
       },
-
       render: {
-        fillStyle: "blue",
-      },
+        fillStyle: "white"
+      }
     })
+    World.add(world, heart)
+
+    console.log('YOOOOOOOOOO!OO!O!O!O!O!O')
 
 
-    World.add(world, earth)
-
+    // Add dots
     for (var i = 0; i < 300; i += 1) {
-      var body = Bodies.circle(
-        Common.random(0, render.options.width), 
-        Common.random(0, render.options.height),
-        8
-      );
+      let x = Common.random(0, render.options.width * 1.2)
+      let y = Common.random(0, render.options.height * 1.2)
 
-      World.add(world, body);
+      var body = Bodies.circle(x, y, 8, {
+        render: {
+          fillStyle: 'red'
+        }
+      })
+
+      // World.add(world, [body, constraint]);
+      World.add(world, [body]);
     }
 
+
+
+    // Make earth follow mouse
     var mouse = Mouse.create(render.canvas);
 
     Events.on(engine, 'afterUpdate', function() {
-        if (!mouse.position.x) {
-          return;
-        }
+      if (!mouse.position.x) {
+        return;
+      }
 
-        // smoothly move the attractor body towards the mouse
-        Body.translate(earth, {
-            x: (mouse.position.x - earth.position.x) * 0.25,
-            y: (mouse.position.y - earth.position.y) * 0.25
-        });
+      Body.translate(heart, {
+        x: (mouse.position.x - heart.position.x) * 0.25,
+        y: (mouse.position.y - heart.position.y) * 0.25
+      });
     });
 
+    // if (!someStateValue) {
+    //   earth.plugin.attractors = [attractorFunction] 
+    // } else {
+    //   earth.plugin.attractors = []
+    // }
 
+
+    // Light the fuse
     Engine.run(engine)
     Render.run(render)
 
@@ -136,16 +139,16 @@ const Scene = () => {
     setScene(render)
 
     window.addEventListener("resize", handleResize)
-  }, [])
+  }, [someStateValue])
 
-
+  // Clean up event listener…?
   useEffect(() => {
     return () => {
       window.removeEventListener("resize", handleResize)
     }
   }, [])
 
-
+  // React to window changes
   useEffect(() => {
     if (constraints) {
       let {width, height} = constraints
@@ -187,6 +190,7 @@ const Scene = () => {
         height: "100%"
       }}
     > 
+      <button onClick={handleClick}>button</button>
       <canvas ref={canvasRef}/>
     </div>
   )

@@ -6,5 +6,23 @@
 
 module.exports = {
   /* Your site config here */
-  plugins: [],
+  plugins: [
+
+  {
+    resolve: "gatsby-plugin-react-svg",
+    options: {
+      rule: {
+        include: /static/ 
+      }
+    }
+  },
+  {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `svg`,
+        path: `${__dirname}/static/svg/`,
+      },
+    },
+
+  ],
 }
