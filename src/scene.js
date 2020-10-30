@@ -9,6 +9,32 @@ const STATIC_DENSITY = 15
 const PARTICLE_SIZE = 6
 const PARTICLE_BOUNCYNESS = 0.9
 const HEART_SVG_PATH = 'M75.056,18.917c0.95,1.284 2.451,2.043 4.048,2.043c1.598,-0 3.098,-0.759 4.049,-2.043c17.545,-24.076 47.172,-23.008 62.565,-8.874c16.657,15.289 16.657,45.869 0,76.448c-10.435,20.53 -35.547,45.147 -58.616,61.051c-4.828,3.277 -11.167,3.277 -15.995,0c-23.069,-15.904 -48.181,-40.521 -58.616,-61.051c-16.655,-30.579 -16.655,-61.159 -0,-76.448c15.393,-14.134 45.019,-15.202 62.565,8.874Z'
+const COLORS = [
+  '#68272d',
+  '#ff4a26','#ff4a26',
+  '#ffa899','#ffa899',
+  '#ffd4bf',
+
+  '#b75b00',
+  '#fea600','#fea600',
+  '#fff100',
+  '#fffbb1',
+
+  '#236136',
+  '#0cc045',
+  '#8fffa1','#8fffa1',
+  '#c9ffd5',
+
+  '#1e3967',
+  '#1675da','#1675da','#1675da', '#1675da', '#1675da',
+  '#85f3ff',
+  '#cffffa',
+
+  // '#423d34',
+  '#90856f',
+  '#cbc5b9',
+  '#f5f1ea'
+]
 
 const createHeartVertices = (length = 15) => {
   let heartSvgPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -35,6 +61,8 @@ const Scene = () => {
   const handleClick = () => {
     setSomeStateValue(!someStateValue)
   }
+
+  var scaleFactor = 0.01
 
   useEffect(() => {
     let Engine = Matter.Engine
@@ -64,12 +92,22 @@ const Scene = () => {
       },
     })
 
+    Events.on(render, "afterRender", () => {
+      if (Math.random() > 0.98) {
+        scaleFactor = scaleFactor + 0.01
+        if (scaleFactor > 1) 
+          scaleFactor = 1
+        console.log(scaleFactor)  
+      }    
+    })
+
     let attractorFunction = (bodyA, bodyB) => {
       return {
-        x: (bodyA.position.x - bodyB.position.x) * 1e-6,
-        y: (bodyA.position.y - bodyB.position.y) * 1e-6,
+        x: (bodyA.position.x - bodyB.position.x) * 1e-6 * scaleFactor,
+        y: (bodyA.position.y - bodyB.position.y) * 1e-6 * scaleFactor,
       };
     }
+
 
     const floor = Bodies.rectangle(0, 0, 0, STATIC_DENSITY, {
       isStatic: true,
@@ -81,6 +119,7 @@ const Scene = () => {
 
     const heart = Matter.Bodies.fromVertices(200, 200, createHeartVertices(), {
       isStatic: true,
+      restitution: 0.4,
       plugin: {
         attractors: [attractorFunction]
       },
@@ -90,17 +129,17 @@ const Scene = () => {
     })
     World.add(world, heart)
 
-    console.log('YOOOOOOOOOO!OO!O!O!O!O!O')
-
 
     // Add dots
     for (var i = 0; i < 300; i += 1) {
-      let x = Common.random(0, render.options.width * 1.2)
-      let y = Common.random(0, render.options.height * 1.2)
+      let x = Common.random(0, render.options.width * 2)
+      let y = Common.random(0, render.options.height * 2)
 
       var body = Bodies.circle(x, y, 8, {
+        frictionStatic: 0.2,
+        restitution: 0.8,
         render: {
-          fillStyle: 'red'
+          fillStyle: Common.choose(COLORS)
         }
       })
 
@@ -177,6 +216,7 @@ const Scene = () => {
       // ])
     }
   }, [scene, constraints])
+
 
 
   return (
