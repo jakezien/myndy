@@ -3,7 +3,9 @@ import { useStaticQuery, graphql } from "gatsby"
 import Matter from "matter-js"
 import MatterAttractors from "matter-attractors"
 
-window.decomp = require('poly-decomp');
+if (typeof window !== 'undefined') {
+  window.decomp = require('poly-decomp');
+}
 
 const STATIC_DENSITY = 15
 const PARTICLE_SIZE = 6
