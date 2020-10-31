@@ -8,7 +8,7 @@ if (typeof window !== 'undefined') {
 }
 
 const STATIC_DENSITY = 15
-const PARTICLE_SIZE = 6
+const PARTICLE_SIZE = 7
 const PARTICLE_BOUNCYNESS = 0.9
 const HEART_SVG_PATH = 'M75.056,18.917c0.95,1.284 2.451,2.043 4.048,2.043c1.598,-0 3.098,-0.759 4.049,-2.043c17.545,-24.076 47.172,-23.008 62.565,-8.874c16.657,15.289 16.657,45.869 0,76.448c-10.435,20.53 -35.547,45.147 -58.616,61.051c-4.828,3.277 -11.167,3.277 -15.995,0c-23.069,-15.904 -48.181,-40.521 -58.616,-61.051c-16.655,-30.579 -16.655,-61.159 -0,-76.448c15.393,-14.134 45.019,-15.202 62.565,8.874Z'
 const COLORS = [
@@ -54,19 +54,47 @@ const Scene = () => {
   const [constraints, setContraints] = useState()
   const [scene, setScene] = useState()
 
-  const [someStateValue, setSomeStateValue] = useState(false)
 
-  const handleResize = () => {
+   const handleResize = () => {
     setContraints(boxRef.current.getBoundingClientRect())
   }
 
-  const handleClick = () => {
-    setSomeStateValue(!someStateValue)
+
+
+  const createFloor = () => {
+    return Matter.Bodies.rectangle(0, 0, 0, STATIC_DENSITY, {
+      isStatic: true,
+      render: {
+        fillStyle: "blue",
+      },
+    })
   }
 
-  var scaleFactor = 0.01
+  const createParticle = (point) => {
+    let p = Matter.Bodies.circle(
+      point.x, point.y, PARTICLE_SIZE, {
+        restitution: PARTICLE_BOUNCYNESS,
+        render: {
+          fillStyle: Matter.Common.choose(COLORS)
+        }
+      })
+    Matter.Body.setDensity(p, Math.random() * 0.125 + 0.002)
+    return p
+  }
+
+  const projectFromPoint = (point, angle, radius) => {
+    return {
+      x: point.x + radius * Math.cos(angle),
+      y: point.y + radius * Math.sin(angle)
+    }
+  }
+
+
+
 
   useEffect(() => {
+    console.log('USEEFFECT SETUP')
+
     let Engine = Matter.Engine
     let Events = Matter.Events
     let Render = Matter.Render
@@ -80,109 +108,76 @@ const Scene = () => {
     let Vertices = Matter.Vertices
     let Svg = Matter.Svg
 
-    let engine = Engine.create()
+    var render, heart
+    var particles = []
+    var scaleFactor = 0.001
 
+    const createAttractorFunction = (scale = 1) => {
+      return (bodyA, bodyB) => {
+        return {
+          x: (bodyA.position.x - bodyB.position.x) * 1e-6 * scale,
+          y: (bodyA.position.y - bodyB.position.y) * 1e-6 * scale,
+        };
+      }
+    }
+
+    const createRandomParticle = () => {
+      let w = render.element.offsetWidth
+      let h = render.element.offsetHeight * 1.2
+
+      let center = {x: w/2, y: h/2}
+
+      let heartRadius = 300
+
+      let randomAngle = Math.random() * Math.PI * 2
+      let randomRadius = Math.random() * Math.hypot(w, h)
+
+      let projectedInnerRadiusPoint = projectFromPoint(center, randomAngle, heartRadius)
+      let projectedPoint = projectFromPoint(projectedInnerRadiusPoint, randomAngle, randomRadius)
+      let randomParticle = createParticle(projectedPoint)
+
+      return randomParticle
+    }
+
+    // Create Engine and World
+    const engine = Engine.create()
     let world = engine.world;
     world.gravity.scale = 0;
 
-    let render = Render.create({
+    // Create Render
+    var render = Render.create({
       element: boxRef.current,
       engine: engine,
       canvas: canvasRef.current,
       options: {
         background: 'transparent',
         wireframes: false,
-      },
+      }
     })
+    console.log('RENDER CREATE')
 
-    Events.on(render, "afterRender", () => {
-      if (Math.random() > 0.98) {
-        scaleFactor = scaleFactor + 0.005
-        if (scaleFactor > 1) 
-          scaleFactor = 1
-        console.log(scaleFactor)  
-      }    
-    })
-
-    let attractorFunction = (bodyA, bodyB) => {
-      return {
-        x: (bodyA.position.x - bodyB.position.x) * 1e-6 * scaleFactor,
-        y: (bodyA.position.y - bodyB.position.y) * 1e-6 * scaleFactor,
-      };
-    }
-
-
-    const floor = Bodies.rectangle(0, 0, 0, STATIC_DENSITY, {
-      isStatic: true,
-      render: {
-        fillStyle: "blue",
-      },
-    })
-
-
-    const heart = Matter.Bodies.fromVertices(
-
+    // Create heart
+    var heart = Bodies.fromVertices(
       render.element.offsetWidth/2,
       render.element.offsetHeight/2,
       createHeartVertices(), {
         isStatic: true,
         restitution: 0.4,
         plugin: {
-          attractors: [attractorFunction]
+          attractors: [createAttractorFunction(0.001)]
         },
         render: {
           fillStyle: "white"
         }
       }
     )
+    console.log('CREATE HEART')
     Body.scale(heart, 1.75, 1.75)
-    World.add(world, heart)
 
-
-    // Add dots
-    for (var i = 0; i < 300; i += 1) {
-      let x = Common.random(render.options.width * -1, render.options.width * 3)
-      let y = Common.random(render.options.width * -1, render.options.height * 3)
-
-      var body = Bodies.circle(x, y, 7, {
-        restitution: 0.8,
-        render: {
-          fillStyle: Common.choose(COLORS)
-        }
-      })
-
-      // World.add(world, [body, constraint]);
-      World.add(world, [body]);
-    }
-
-
-
-    // Make earth follow mouse
-    var mouse = Mouse.create(render.canvas);
-
-    Events.on(engine, 'afterUpdate', function() {
-      if (!mouse.position.x) {
-        return;
-      }
-
-      // Body.translate(heart, {
-      //   x: (mouse.position.x - heart.position.x) * 0.25,
-      //   y: (mouse.position.y - heart.position.y) * 0.25
-      // });
-
-      const { min, max } = heart.bounds
-      let w = max.x - min.x
-      let h = max.y - min.y
-
-
-      Body.translate(heart, {
-        x: (render.options.width/2 - heart.position.x) * 0.1,
-        y: (render.options.height/2 - heart.position.y - h/4) * 0.5 
-      });
-    });
-
-    var mouse = Mouse.create(render.canvas),
-    mouseConstraint = MouseConstraint.create(engine, {
+ 
+    // Create mouse  
+    var mouse = Mouse.create(render.canvas, {})
+    var mouseConstraint = MouseConstraint.create(engine, {
         mouse: mouse,
         constraint: {
             stiffness: 0.2,
@@ -190,15 +185,49 @@ const Scene = () => {
                 visible: false
             }
         }
+      });
+    mouseConstraint.mouse.element.removeEventListener("mousewheel", mouseConstraint.mouse.mousewheel);
+    mouseConstraint.mouse.element.removeEventListener("DOMMouseScroll", mouseConstraint.mouse.mousewheel);
+    World.add(world, mouseConstraint);
+    console.log('MOUSE CREATE')
+    
+
+
+    World.add(world, heart);
+    console.log('WORLD ADD HEART')
+
+    // Add particles
+    for (var i = 0; i < 600; i += 1) {
+      particles.push(createRandomParticle())
+      console.log('CREATE RANDOM PARTICLE')
+    }
+    World.add(world, particles);
+    console.log('WORLD ADD PARTICLES')
+    
+
+
+    ////////////////////////
+    // On every update…
+    ////////////////////////
+    Events.on(engine, 'afterUpdate', () => {
+      // Move heart to center
+      const { min, max } = heart.bounds
+      let w = max.x - min.x
+      let h = max.y - min.y
+
+      Body.translate(heart, {
+        x: (render.options.width/2 - heart.position.x) * 0.25,
+        y: (render.options.height/2 - heart.position.y - h/4) * 0.25 
+      });
+
+      // increase attraction to heart 
+      if (Math.random() > 0.95) {
+        let sf = Math.min(1.25, scaleFactor += 0.1)
+        heart.plugin.attractors = [createAttractorFunction(sf)]
+        console.log(scaleFactor)
+      }
     });
 
-    World.add(world, mouseConstraint);
-
-    // if (!someStateValue) {
-    //   earth.plugin.attractors = [attractorFunction] 
-    // } else {
-    //   earth.plugin.attractors = []
-    // }
 
 
     // Light the fuse
@@ -209,14 +238,12 @@ const Scene = () => {
     setScene(render)
 
     window.addEventListener("resize", handleResize)
-  }, [someStateValue])
 
-  // Clean up event listener…?
-  useEffect(() => {
     return () => {
       window.removeEventListener("resize", handleResize)
     }
   }, [])
+
 
   // React to window changes
   useEffect(() => {

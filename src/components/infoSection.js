@@ -8,6 +8,7 @@ const StyledSection = styled.section`
   z-index: 0;
   background: #CFFFF9;
   padding: ${rhythm(1)};
+  color: #0672DD;
 `
 
 const StyledDiv = styled.div`

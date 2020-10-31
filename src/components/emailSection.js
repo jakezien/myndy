@@ -12,6 +12,8 @@ const StyledSection = styled.section`
   background: #CFFFF9;
   padding: 0 ${rhythm(1)} ${rhythm(1)} ${rhythm(1)};
   margin-top: 0;
+  text-align: center;
+  color: #0672DD;
 `
 
 const EmailSection = () => {
