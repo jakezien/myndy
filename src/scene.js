@@ -76,6 +76,7 @@ const Scene = () => {
     let Mouse = Matter.Mouse
     let Common = Matter.Common
     let Constraint = Matter.Constraint
+    let MouseConstraint = Matter.MouseConstraint
     let Vertices = Matter.Vertices
     let Svg = Matter.Svg
 
@@ -96,7 +97,7 @@ const Scene = () => {
 
     Events.on(render, "afterRender", () => {
       if (Math.random() > 0.98) {
-        scaleFactor = scaleFactor + 0.01
+        scaleFactor = scaleFactor + 0.005
         if (scaleFactor > 1) 
           scaleFactor = 1
         console.log(scaleFactor)  
@@ -120,8 +121,9 @@ const Scene = () => {
 
 
     const heart = Matter.Bodies.fromVertices(
+
       render.element.offsetWidth/2,
-      render.element.offsetHeight/2 - 40,
+      render.element.offsetHeight/2,
       createHeartVertices(), {
         isStatic: true,
         restitution: 0.4,
@@ -133,7 +135,7 @@ const Scene = () => {
         }
       }
     )
-    Body.scale(heart, 1.33, 1.33)
+    Body.scale(heart, 1.75, 1.75)
     World.add(world, heart)
 
 
@@ -143,7 +145,6 @@ const Scene = () => {
       let y = Common.random(render.options.width * -1, render.options.height * 3)
 
       var body = Bodies.circle(x, y, 7, {
-        frictionStatic: 0.2,
         restitution: 0.8,
         render: {
           fillStyle: Common.choose(COLORS)
@@ -169,11 +170,29 @@ const Scene = () => {
       //   y: (mouse.position.y - heart.position.y) * 0.25
       // });
 
+      const { min, max } = heart.bounds
+      let w = max.x - min.x
+      let h = max.y - min.y
+
+
       Body.translate(heart, {
         x: (render.options.width/2 - heart.position.x) * 0.1,
-        y: (render.options.height/2 - heart.position.y) * 0.5 
+        y: (render.options.height/2 - heart.position.y - h/4) * 0.5 
       });
     });
+
+    var mouse = Mouse.create(render.canvas),
+    mouseConstraint = MouseConstraint.create(engine, {
+        mouse: mouse,
+        constraint: {
+            stiffness: 0.2,
+            render: {
+                visible: false
+            }
+        }
+    });
+
+    World.add(world, mouseConstraint);
 
     // if (!someStateValue) {
     //   earth.plugin.attractors = [attractorFunction] 

@@ -19,7 +19,7 @@ const StyledSection = styled.section`
 const StyledDiv = styled.div`
   position: relative;
   z-index: 0;
-
+  pointer-events: none;
 `
 
 const StyledH1 = styled.h1`
