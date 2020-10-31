@@ -117,25 +117,30 @@ const Scene = () => {
     })
 
 
-    const heart = Matter.Bodies.fromVertices(200, 200, createHeartVertices(), {
-      isStatic: true,
-      restitution: 0.4,
-      plugin: {
-        attractors: [attractorFunction]
-      },
-      render: {
-        fillStyle: "white"
+    const heart = Matter.Bodies.fromVertices(
+      render.element.offsetWidth/2,
+      render.element.offsetHeight/2 - 40,
+      createHeartVertices(), {
+        isStatic: true,
+        restitution: 0.4,
+        plugin: {
+          attractors: [attractorFunction]
+        },
+        render: {
+          fillStyle: "white"
+        }
       }
-    })
+    )
+    Body.scale(heart, 1.33, 1.33)
     World.add(world, heart)
 
 
     // Add dots
     for (var i = 0; i < 300; i += 1) {
-      let x = Common.random(0, render.options.width * 2)
-      let y = Common.random(0, render.options.height * 2)
+      let x = Common.random(render.options.width * -1, render.options.width * 3)
+      let y = Common.random(render.options.width * -1, render.options.height * 3)
 
-      var body = Bodies.circle(x, y, 8, {
+      var body = Bodies.circle(x, y, 7, {
         frictionStatic: 0.2,
         restitution: 0.8,
         render: {
@@ -157,9 +162,14 @@ const Scene = () => {
         return;
       }
 
+      // Body.translate(heart, {
+      //   x: (mouse.position.x - heart.position.x) * 0.25,
+      //   y: (mouse.position.y - heart.position.y) * 0.25
+      // });
+
       Body.translate(heart, {
-        x: (mouse.position.x - heart.position.x) * 0.25,
-        y: (mouse.position.y - heart.position.y) * 0.25
+        x: (render.options.width/2 - heart.position.x) * 0.1,
+        y: (render.options.height/2 - heart.position.y) * 0.5 
       });
     });
 
@@ -227,10 +237,10 @@ const Scene = () => {
         top: 0,
         left: 0,
         width: "100%",
-        height: "100%"
+        height: "100%",
+        zIndex: 0
       }}
     > 
-      <button onClick={handleClick}>button</button>
       <canvas ref={canvasRef}/>
     </div>
   )
