@@ -28,7 +28,7 @@ const StyledH1 = styled.h1`
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 2em;
-  margin: 0;
+  margin: 3rem 0 0 0;
   line-height: 1;
 `
 
@@ -38,15 +38,18 @@ const StyledH2 = styled.h2`
   line-height: 1;
 `
 
+const StyledH4 = styled.h4`
+  margin-top: .5rem;
+`
+
 const HeroSection = () => {
   return (
     <StyledSection>
       <Scene/>
       <StyledDiv>
-        <h4>Focused heart</h4>
         <StyledH1>Myndset</StyledH1>
-        <StyledH2>is mental fitness.</StyledH2>
-        <h4>Strong mind</h4>
+        <StyledH2>mental fitness</StyledH2>
+        <StyledH4>Focused heart,<br/>Strong mind</StyledH4>
       </StyledDiv>
     </StyledSection>
   )

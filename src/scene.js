@@ -152,6 +152,7 @@ const Scene = () => {
       options: {
         background: 'transparent',
         wireframes: false,
+        // pixelRatio: 'auto'
       }
     })
     console.log('RENDER CREATE')
@@ -224,7 +225,7 @@ const Scene = () => {
       if (Math.random() > 0.95) {
         let sf = Math.min(1.25, scaleFactor += 0.1)
         heart.plugin.attractors = [createAttractorFunction(sf)]
-        console.log(scaleFactor)
+        // console.log(scaleFactor)
       }
     });
 
@@ -249,6 +250,7 @@ const Scene = () => {
   useEffect(() => {
     if (constraints) {
       let {width, height} = constraints
+      console.log('CONSTRAINTS ', constraints)
 
       // Dynamically update canvas and bounds
       scene.bounds.max.x = width

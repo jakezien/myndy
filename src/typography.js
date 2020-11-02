@@ -9,7 +9,7 @@ const headerOpacity = 0.9
 // }
 
 const typography = new Typography({
-  baseFontSize: "18px",
+  baseFontSize: "24px",
   baseLineHeight: 1.2,
   headerWeight: 700,
   scaleRatio: 2,
@@ -30,6 +30,7 @@ const typography = new Typography({
       marginBottom: rhythm(.5),
       marginTop: rhythm(1.5),
       letterSpacing: '0.01em',
+      lineHeight: 1.1
     },
     'h4': {
       letterSpacing: '0.3em',
@@ -37,6 +38,7 @@ const typography = new Typography({
       fontWeight: 300,
       fontSize: '0.8em',
       margin: '1rem 0',
+      lineHeight: '1.5em'
     },
     'a, a *': {
       color: 'inherit'
@@ -56,6 +58,9 @@ const typography = new Typography({
       borderRadius: '4px',
       position: 'relative',
       left: '-4px'
+    },
+    'p': {
+      marginBottom: '1rem',
     }
   })
 })
