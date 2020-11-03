@@ -173,7 +173,7 @@ const Scene = () => {
       }
     )
     console.log('CREATE HEART')
-    Body.scale(heart, 1.75, 1.75)
+    Body.scale(heart, 2.25, 2.25)
 
  
     // Create mouse  

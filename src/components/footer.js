@@ -8,7 +8,7 @@ const StyledFooter = styled.footer`
   z-index: 0;
   background: #1E3967;
   padding: ${rhythm(1)};
-  color: #0672DD;
+  color: #1675DA;
   border: none;
   margin: 0;
 `
@@ -18,15 +18,15 @@ const StyledDiv = styled.div`
   margin: 0 auto;
   text-align: center;
 `
-const StyledH2 = styled.h2`
-  max-width: 75%;
+const StyledH4 = styled.h4`
+  font-weight: 400;
 `
 
 const Footer = () => {
   return (
     <StyledFooter>
       <StyledDiv>
-        <h4>&copy; 2020 Alden Collective, LLC. All Rights Reserved.</h4>
+        <StyledH4>&copy; 2020 Alden Collective, LLC. All Rights Reserved.</StyledH4>
       </StyledDiv>
     </StyledFooter>
   )
