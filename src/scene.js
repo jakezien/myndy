@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react"
 import { useStaticQuery, graphql } from "gatsby"
 import Matter from "matter-js"
 import MatterAttractors from "matter-attractors"
+import "pathseg"
 
 if (typeof window !== 'undefined') {
   window.decomp = require('poly-decomp');
