@@ -6,7 +6,7 @@ import Scene from "../Scene"
 
 const StyledSection = styled.section`
   min-height: 440px;
-  height: 75vh;
+  height: 60vh;
   position: relative;
   z-index: 0;
   text-align: center;
@@ -14,6 +14,9 @@ const StyledSection = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  @media screen and (min-width: 640px) {
+    height: 75vh;
+  }
 `
 
 const StyledDiv = styled.div`
