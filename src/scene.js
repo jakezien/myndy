@@ -19,10 +19,17 @@ const zeros = Colors.zeros;
 const ones = Colors.ones;
 const twos = Colors.twos;
 const threes = Colors.threes;
+const warmer = [
+  Colors.yellow1,
+  Colors.yellow2,
+  Colors.red1,
+  Colors.red2,
+]
 const COLORS = zeros.concat(
   ones, ones, ones,
   twos, twos, twos, twos, twos,
-  threes, threes, threes
+  threes, threes, threes,
+  warmer, warmer, warmer, warmer
 )
   
 

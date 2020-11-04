@@ -35,9 +35,10 @@ const InfoSection = () => {
           <br/>
           <StyledSpan>••••••</StyledSpan>
         </StyledH2>
-        <p>We’re here to bring you a new model for mental fitness: Myndset. Mental Fitness is the practice of proactively strengthening your heart and mind to support all facets of your life.</p>
-        <p>Myndset is a practical, skills-based approach to build confidence, optimism, resilience, energy, focus and heart into your everyday.</p>
-        <p>If you’re interested in learning more about what we can do for you, please share your email here:</p>
+        <p>Life is busy, complex and challenging, so we’re here to bring you a new model for mental fitness, Myndset.</p>
+        <p>Mental Fitness is the practice of proactively helping you to strengthen your heart and mind to support all facets of your life.</p>
+        <p>Myndset  is a practical, skills-based approach to build confidence, optimism, resilience, and energy into your everyday.</p>
+        <p>If you’re interested in learning more about how we can help you, please share your email here:</p>
         <EmailSection />
       </StyledDiv>
     </StyledSection>

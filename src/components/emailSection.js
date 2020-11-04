@@ -54,17 +54,17 @@ const EmailSection = () => {
         action="https://myndset.us2.list-manage.com/subscribe/post?u=e88de07af0bfd5eb78fc8d316&amp;id=f12a43a511"
         fields={[
           {
+            name: 'FNAME',
+            placeholder: 'Your name',
+            type: 'text',
+            required: true
+          },
+          {
             name: 'EMAIL',
             placeholder: 'Email',
             type: 'email',
             required: true
           },
-          {
-            name: 'FNAME',
-            placeholder: 'Your name',
-            type: 'text',
-            required: true
-          }
         ]}
 
         
