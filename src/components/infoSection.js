@@ -15,17 +15,26 @@ const StyledSection = styled.section`
 
 const StyledDiv = styled.div`
   max-width: ${rhythm(24)};
-  margin: 0 auto 3rem auto;
+  margin: 0 auto 2rem auto;
 `
 const StyledH2 = styled.h2`
   max-width: 75%;
+  margin-bottom: 1em;
+`
+const StyledSpan = styled.span`
+  position: relative;
+  top: 0.15em;
+  letter-spacing:-0.07em;
 `
 
 const InfoSection = () => {
   return (
     <StyledSection>
       <StyledDiv>
-        <StyledH2>Why don’t we give the same attention to our mind as we do to our body?<br/>—</StyledH2>
+        <StyledH2>Why don’t we give the same attention to our mind as we do to our body?
+          <br/>
+          <StyledSpan>••••••</StyledSpan>
+        </StyledH2>
         <p>We’re here to bring you a new model for mental fitness: Myndset. Mental Fitness is the practice of proactively strengthening your heart and mind to support all facets of your life.</p>
         <p>Myndset is a practical, skills-based approach to build confidence, optimism, resilience, energy, focus and heart into your everyday.</p>
         <p>If you’re interested in learning more about what we can do for you, please share your email here:</p>

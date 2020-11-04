@@ -2,13 +2,14 @@ import React from "react"
 import styled from "styled-components"
 import { Link } from "gatsby"
 import { rhythm } from "../typography"
+import Colors from "../colors"
 
 const StyledFooter = styled.footer`
   position: relative;
   z-index: 0;
-  background: #1E3967;
+  background: ${Colors.blue0};
   padding: ${rhythm(1)};
-  color: #1675DA;
+  color: ${Colors.blue1};
   border: none;
   margin: 0;
 `

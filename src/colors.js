@@ -34,7 +34,6 @@ const Colors = {
   },
 
   get zeros() {
-    console.log('GOTTEM')
     return [
       this.red0,
       this.yellow0,

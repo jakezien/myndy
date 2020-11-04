@@ -1,6 +1,6 @@
 import Typography from "typography"
 
-const headerOpacity = 0.9
+const headerOpacity = 1
 
 // const inputFontStyles = { 
 //   fontFamily: "Input",
@@ -25,42 +25,50 @@ const typography = new Typography({
       marginBottom: rhythm(.5),
       marginTop: rhythm(1.5),
     },
+
     'h2': {
       opacity: headerOpacity,
       marginBottom: rhythm(.5),
       marginTop: rhythm(1.5),
-      letterSpacing: '0.01em',
-      lineHeight: 1.1
+      lineHeight: 1.1,
+      fontFeatureSettings: `"kern" 1, "liga" 1;`
     },
+
     'h4': {
-      letterSpacing: '0.3em',
+      letterSpacing: '0.25em',
       textTransform: 'uppercase',
       fontWeight: 300,
       fontSize: '0.8em',
       margin: '1rem 0',
       lineHeight: '1.5em'
     },
+
     'a, a *': {
       color: 'inherit'
     },
+
     'p>a, *.link': {
       color: '#777',
       textDecoration: 'none',
       borderBottom: '2px solid ' + 'yellow'
     },
+
     'p>a': {
       fontSize: '0.95em'
     },
+
     'p>a:hover, *.link:hover': {
       background: 'yellow',
       color: '#444',
       border: '4px solid ' + 'yellow',
       borderRadius: '4px',
       position: 'relative',
-      left: '-4px'
+      left: '-43px'
     },
+
     'p': {
       marginBottom: '1rem',
+      fontFeatureSettings: `"kern" 1, "liga" 1;`
     }
   })
 })

@@ -10,8 +10,9 @@ if (typeof window !== 'undefined') {
 }
 
 const STATIC_DENSITY = 15
-const PARTICLE_SIZE = 7
-const PARTICLE_BOUNCYNESS = 0.55
+const PARTICLE_SIZE = 6
+const PARTICLE_BOUNCYNESS = 0.4
+const HEART_BOUNCYNESS = 0.9
 const HEART_SVG_PATH = 'M75.056,18.917c0.95,1.284 2.451,2.043 4.048,2.043c1.598,-0 3.098,-0.759 4.049,-2.043c17.545,-24.076 47.172,-23.008 62.565,-8.874c16.657,15.289 16.657,45.869 0,76.448c-10.435,20.53 -35.547,45.147 -58.616,61.051c-4.828,3.277 -11.167,3.277 -15.995,0c-23.069,-15.904 -48.181,-40.521 -58.616,-61.051c-16.655,-30.579 -16.655,-61.159 -0,-76.448c15.393,-14.134 45.019,-15.202 62.565,8.874Z'
 
 const zeros = Colors.zeros;
@@ -46,8 +47,6 @@ const Scene = () => {
     setContraints(boxRef.current.getBoundingClientRect())
   }
 
-
-
   const createFloor = () => {
     return Matter.Bodies.rectangle(0, 0, 0, STATIC_DENSITY, {
       isStatic: true,
@@ -61,11 +60,15 @@ const Scene = () => {
     let p = Matter.Bodies.circle(
       point.x, point.y, PARTICLE_SIZE, {
         restitution: PARTICLE_BOUNCYNESS,
+        frictionStatic: 8,
         render: {
           fillStyle: Matter.Common.choose(COLORS)
         }
-      })
+      }, 6)
     Matter.Body.setDensity(p, Math.random() * 0.125 + 0.002)
+    Matter.Events.on(p, "sleepStart", () => {
+      console.log('SLEEEEEEEEP')
+    });
     return p
   }
 
@@ -85,6 +88,7 @@ const Scene = () => {
     let Engine = Matter.Engine
     let Events = Matter.Events
     let Render = Matter.Render
+    let Runner = Matter.Runner
     let World = Matter.World
     let Body = Matter.Body
     let Bodies = Matter.Bodies
@@ -100,33 +104,29 @@ const Scene = () => {
     var scaleFactor = 0.001
 
     const createAttractorFunction = (scale = 1) => {
-
       return (bodyA, bodyB) => {
-
         let { min, max } = bodyA.bounds
-
         let w = max.x - min.x
         let h = max.y - min.y
 
         return {
           x: (bodyA.position.x - bodyB.position.x) * 1e-6 * scale,
-          y: (bodyA.position.y + h/4 - bodyB.position.y) * 1e-6 * scale,
+          y: (bodyA.position.y + h/5 - bodyB.position.y) * 1e-6 * scale,
         };
       }
     }
 
     const createRandomParticle = () => {
+      let emptyRadius = 300
+
       let w = render.element.offsetWidth
       let h = render.element.offsetHeight
-
       let center = {x: w/2, y: h/2}
-
-      let heartRadius = 300
 
       let randomAngle = Math.random() * Math.PI * 2
       let randomRadius = Math.random() * Math.hypot(w, h)
 
-      let projectedInnerRadiusPoint = projectFromPoint(center, randomAngle, heartRadius)
+      let projectedInnerRadiusPoint = projectFromPoint(center, randomAngle, emptyRadius)
       let projectedPoint = projectFromPoint(projectedInnerRadiusPoint, randomAngle, randomRadius)
       let randomParticle = createParticle(projectedPoint)
 
@@ -134,7 +134,11 @@ const Scene = () => {
     }
 
     // Create Engine and World
-    const engine = Engine.create()
+    const runner = Runner.create()
+    const engine = Engine.create({
+      enableSleeping: true,
+      positionIterations: 3,
+    })
     let world = engine.world;
     world.gravity.scale = 0;
 
@@ -144,7 +148,7 @@ const Scene = () => {
       engine: engine,
       canvas: canvasRef.current,
       options: {
-        background: 'transparent',
+        background: 'white',
         wireframes: false,
         // pixelRatio: 'auto'
       }
@@ -157,7 +161,7 @@ const Scene = () => {
       render.element.offsetHeight/2,
       createHeartVertices(), {
         isStatic: true,
-        restitution: 0.4,
+        restitution: HEART_BOUNCYNESS,
         plugin: {
           attractors: [createAttractorFunction(0.001)]
         },
@@ -218,15 +222,33 @@ const Scene = () => {
       // increase attraction to heart 
       if (Math.random() > 0.95) {
         let sf = Math.min(1.25, scaleFactor += 0.1)
-        heart.plugin.attractors = [createAttractorFunction(sf)]
-        // console.log(scaleFactor)
+        if (scaleFactor < 1.25) {
+          heart.plugin.attractors = [createAttractorFunction(sf)]
+        }
       }
+
+      // if (engine.timing.timestamp > 9000) {
+      //   let avgSpeed = 0;
+      //   for (var i = 0; i < 750; i += 1) {
+      //     avgSpeed += particles[i].speed
+      //     // if (p.speed) {
+      //       // console.log(p.speed)
+      //       // Matter.Sleeping.set(p, true);
+      //       // Matter.Body.setVelocity(p, 0);
+      //       // Matter.Body.setAngularVelocity(p, 0);
+      //     // }
+      //   }
+      //   if (avgSpeed/750 < 0.1) {
+      //     console.log('OH WE RESTIN')
+      //     runner.enabled = false
+      //   }
+      // }
     });
 
 
 
     // Light the fuse
-    Engine.run(engine)
+    Runner.run(engine)
     Render.run(render)
 
     setContraints(boxRef.current.getBoundingClientRect())
