@@ -25,12 +25,53 @@ const Colors = {
   grey2:  '#cbc5b9',
   grey3:  '#f5f1ea',
 
-  text: () => {
+  get text() {
     return this.blue0
   },
 
-  textLight: () => {
+  get textLight() {
     return this.blue3
+  },
+
+  get zeros() {
+    console.log('GOTTEM')
+    return [
+      this.red0,
+      this.yellow0,
+      this.green0,
+      this.blue0,
+      this.grey0,
+    ]
+  },
+
+  get ones() {
+    return [
+      this.red1,
+      this.yellow1,
+      this.green1,
+      this.blue1,
+      this.grey1,
+    ]
+  },
+
+  get twos() {
+    return [
+      this.red2,
+      this.yellow2,
+      this.green2,
+      this.blue2,
+      this.grey2,
+    ]
+  },
+
+  get threes() {
+    return [
+      this.red3,
+      this.yellow3,
+      this.green3,
+      this.blue3,
+      this.grey3,
+    ]
   }
 
 };

@@ -31,7 +31,7 @@ const StyledH1 = styled.h1`
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 2em;
-  margin: 3rem 0 0 0;
+  margin: 2rem 0 0 0;
   line-height: 1;
 `
 

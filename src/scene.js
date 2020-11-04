@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from "react"
 import { useStaticQuery, graphql } from "gatsby"
+import "pathseg"
 import Matter from "matter-js"
 import MatterAttractors from "matter-attractors"
-import "pathseg"
+import Colors from "./colors"
 
 if (typeof window !== 'undefined') {
   window.decomp = require('poly-decomp');
@@ -10,34 +11,19 @@ if (typeof window !== 'undefined') {
 
 const STATIC_DENSITY = 15
 const PARTICLE_SIZE = 7
-const PARTICLE_BOUNCYNESS = 0.9
+const PARTICLE_BOUNCYNESS = 0.55
 const HEART_SVG_PATH = 'M75.056,18.917c0.95,1.284 2.451,2.043 4.048,2.043c1.598,-0 3.098,-0.759 4.049,-2.043c17.545,-24.076 47.172,-23.008 62.565,-8.874c16.657,15.289 16.657,45.869 0,76.448c-10.435,20.53 -35.547,45.147 -58.616,61.051c-4.828,3.277 -11.167,3.277 -15.995,0c-23.069,-15.904 -48.181,-40.521 -58.616,-61.051c-16.655,-30.579 -16.655,-61.159 -0,-76.448c15.393,-14.134 45.019,-15.202 62.565,8.874Z'
-const COLORS = [
-  '#68272d',
-  '#ff4a26','#ff4a26',
-  '#ffa899','#ffa899',
-  '#ffd4bf',
 
-  '#b75b00',
-  '#fea600','#fea600',
-  '#fff100',
-  '#fffbb1',
-
-  '#236136',
-  '#0cc045',
-  '#8fffa1','#8fffa1',
-  '#c9ffd5',
-
-  '#1e3967',
-  '#1675da','#1675da','#1675da', '#1675da', '#1675da',
-  '#85f3ff',
-  '#cffffa',
-
-  // '#423d34',
-  '#90856f',
-  '#cbc5b9',
-  '#f5f1ea'
-]
+const zeros = Colors.zeros;
+const ones = Colors.ones;
+const twos = Colors.twos;
+const threes = Colors.threes;
+const COLORS = zeros.concat(
+  ones, ones, ones,
+  twos, twos, twos, twos, twos,
+  threes, threes, threes
+)
+  
 
 const createHeartVertices = (length = 15) => {
   let heartSvgPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -114,17 +100,24 @@ const Scene = () => {
     var scaleFactor = 0.001
 
     const createAttractorFunction = (scale = 1) => {
+
       return (bodyA, bodyB) => {
+
+        let { min, max } = bodyA.bounds
+
+        let w = max.x - min.x
+        let h = max.y - min.y
+
         return {
           x: (bodyA.position.x - bodyB.position.x) * 1e-6 * scale,
-          y: (bodyA.position.y - bodyB.position.y) * 1e-6 * scale,
+          y: (bodyA.position.y + h/4 - bodyB.position.y) * 1e-6 * scale,
         };
       }
     }
 
     const createRandomParticle = () => {
       let w = render.element.offsetWidth
-      let h = render.element.offsetHeight * 1.2
+      let h = render.element.offsetHeight
 
       let center = {x: w/2, y: h/2}
 
@@ -199,7 +192,7 @@ const Scene = () => {
     console.log('WORLD ADD HEART')
 
     // Add particles
-    for (var i = 0; i < 600; i += 1) {
+    for (var i = 0; i < 750; i += 1) {
       particles.push(createRandomParticle())
       console.log('CREATE RANDOM PARTICLE')
     }
