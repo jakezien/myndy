@@ -20,6 +20,11 @@ const Colors = {
   blue2:  '#85f3ff',
   blue3:  '#cffffa',
 
+  purple0:  '#371E68',
+  purple1:  '#7748D7',
+  purple2:  '#BCA6FF',
+  purple3:  '#DDD6FF',
+
   grey0:  '#423d34',
   grey1:  '#90856f',
   grey2:  '#cbc5b9',
@@ -39,6 +44,7 @@ const Colors = {
       this.yellow0,
       this.green0,
       this.blue0,
+      this.purple0,
       this.grey0,
     ]
   },
@@ -49,6 +55,7 @@ const Colors = {
       this.yellow1,
       this.green1,
       this.blue1,
+      this.purple1,
       this.grey1,
     ]
   },
@@ -59,6 +66,7 @@ const Colors = {
       this.yellow2,
       this.green2,
       this.blue2,
+      this.purple2,
       this.grey2,
     ]
   },
@@ -69,6 +77,7 @@ const Colors = {
       this.yellow3,
       this.green3,
       this.blue3,
+      this.purple3,
       this.grey3,
     ]
   }

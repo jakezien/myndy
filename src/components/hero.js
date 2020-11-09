@@ -51,7 +51,7 @@ const HeroSection = () => {
       <Scene/>
       <StyledDiv>
         <StyledH1>Myndset</StyledH1>
-        <StyledH2>mental fitness</StyledH2>
+        <StyledH2>mental fitness for womxn</StyledH2>
         <StyledH4>Focused heart,<br/>Strong mind</StyledH4>
       </StyledDiv>
     </StyledSection>

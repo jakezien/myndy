@@ -178,7 +178,7 @@ const Scene = () => {
       }
     )
     console.log('CREATE HEART')
-    Body.scale(heart, 2.25, 2.25)
+    Body.scale(heart, 2.5, 2.5)
 
  
     // Create mouse  
@@ -203,7 +203,7 @@ const Scene = () => {
     console.log('WORLD ADD HEART')
 
     // Add particles
-    for (var i = 0; i < 750; i += 1) {
+    for (var i = 0; i < 850; i += 1) {
       particles.push(createRandomParticle())
       console.log('CREATE RANDOM PARTICLE')
     }
@@ -222,7 +222,7 @@ const Scene = () => {
       let h = max.y - min.y
 
       Body.translate(heart, {
-        x: (render.options.width/2 - heart.position.x) * 0.25,
+        x: (render.options.width/2 - heart.position.x + w * 0.033) * 0.25,
         y: (render.options.height/2 - heart.position.y - h/4) * 0.25 
       });
 
