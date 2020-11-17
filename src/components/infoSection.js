@@ -35,10 +35,10 @@ const InfoSection = () => {
           <br/>
           <StyledSpan>••••••</StyledSpan>
         </StyledH2>
+        <p>Myndset is a practical, skills-based approach for you to build confidence, optimism, resilience, and energy into your everyday.</p>
         <p>Life is busy, complex and challenging, so we’re here to bring you a new model for mental fitness, Myndset.</p>
         <p>Mental Fitness is the practice of proactively helping you to strengthen your heart and mind to support all facets of your life.</p>
-        <p>Myndset is a practical, skills-based approach for womxn to build confidence, optimism, resilience, and energy into their everyday.</p>
-        <p>If you’re interested in learning more about how we can help you, please share your email here:</p>
+        <p>We are in the process of building new tools, products and experiences for you. If you’re interested in learning about upcoming programming and product launches, please share your email here:</p>
         <EmailSection />
       </StyledDiv>
     </StyledSection>

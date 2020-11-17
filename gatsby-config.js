@@ -26,6 +26,20 @@ module.exports = {
       },
     },
 
+
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "G-1E4V07KQCV",
+        head: true,
+        anonymize: true,
+        respectDNT: true,
+        exclude: ["/preview/**", "/do-not-track/me/too/"],
+        pageTransitionDelay: 0,
+        defer: false
+      },
+    },
+
     {
       resolve: 'gatsby-plugin-web-font-loader',
       options: {

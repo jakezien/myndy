@@ -45,7 +45,7 @@ const Colors = {
       this.green0,
       this.blue0,
       this.purple0,
-      this.grey0,
+      // this.grey0,
     ]
   },
 
@@ -56,7 +56,7 @@ const Colors = {
       this.green1,
       this.blue1,
       this.purple1,
-      this.grey1,
+      // this.grey1,
     ]
   },
 
@@ -67,7 +67,7 @@ const Colors = {
       this.green2,
       this.blue2,
       this.purple2,
-      this.grey2,
+      // this.grey2,
     ]
   },
 
@@ -78,7 +78,7 @@ const Colors = {
       this.green3,
       this.blue3,
       this.purple3,
-      this.grey3,
+      // this.grey3,
     ]
   }
 

@@ -21,7 +21,7 @@ const StyledDiv = styled.div`
     };
 
     .msg-alert {
-      background: 
+      background: #cffffa;
     }
 
     button {

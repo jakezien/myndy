@@ -27,7 +27,7 @@ const Footer = () => {
   return (
     <StyledFooter>
       <StyledDiv>
-        <StyledH4>&copy; 2020 Alden Collective, LLC. Brooklyn,&nbsp;NY. All Rights Reserved.</StyledH4>
+        <StyledH4>&copy; 2020 <a href="https://www.linkedin.com/in/lissy-alden/">Alden Collective, LLC.</a> Brooklyn,&nbsp;NY. All Rights Reserved.</StyledH4>
       </StyledDiv>
     </StyledFooter>
   )
