@@ -20,7 +20,7 @@ const StyledDiv = styled.div`
       border: none;
     };
 
-    .msg-alert {
+    .msg-alert p{
       background: #cffffa;
     }
 
