@@ -10,6 +10,19 @@ module.exports = {
   plugins: [
 
     {
+      resolve: `gatsby-plugin-google-gtag`,
+      options: {
+        trackingIds: [
+          "G-1E4V07KQCV", 
+        ],
+        pluginConfig: {
+          head: false,
+          respectDNT: true,
+        },
+      },
+    },
+
+    {
       resolve: "gatsby-plugin-react-svg",
       options: {
         rule: {
@@ -27,18 +40,6 @@ module.exports = {
     },
 
 
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        trackingId: "G-1E4V07KQCV",
-        head: true,
-        anonymize: true,
-        respectDNT: true,
-        exclude: ["/preview/**", "/do-not-track/me/too/"],
-        pageTransitionDelay: 0,
-        defer: false
-      },
-    },
 
     {
       resolve: 'gatsby-plugin-web-font-loader',
