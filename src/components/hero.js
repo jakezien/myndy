@@ -58,7 +58,7 @@ const HeroSection = () => {
     <StyledSection>
       <Scene/>
       <StyledDiv>
-        <StyledImg height='4em' src={'/logo.svg'} alt="Logo" />
+        <StyledImg height='4em' src={'svg/logo.svg'} alt="Logo" />
         <StyledH1>Myndy</StyledH1>
         <StyledH2>Mental Fitness</StyledH2>
         {/*<StyledH4>Focused heart,<br/>Strong mind</StyledH4>*/}
