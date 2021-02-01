@@ -1,22 +1,28 @@
 const Colors = {
 
-  red0:  '#68272d',
+  red0:  '#813831',
   red1:  '#ff4a26',
   red2:  '#ffa899',
-  red3:  '#ffd4bf',
+  red3:  '#FFD9C7',
 
-  yellow0:  '#b75b00',
-  yellow1:  '#fea600',
-  yellow2:  '#fff100',
-  yellow3:  '#fffbb1',
+  orange0:  '#A04508',
+  orange1:  '#FF8C00',
+  orange2:  '#FFC783',
+  orange3:  '#FFE3C2',
+
+  yellow0:  '#995C00',
+  yellow1:  '#FFCC00',
+  yellow2:  '#FFE680',
+  yellow3:  '#FFF2CC',
 
   green0:  '#236136',
   green1:  '#0cc045',
   green2:  '#8fffa1',
   green3:  '#c9ffd5',
 
-  blue0:  '#1e3967',
-  blue1:  '#1675da',
+  blue0:  '#082568',
+  blue0a: '#08399B',
+  blue1:  '#006FE6',
   blue2:  '#85f3ff',
   blue3:  '#cffffa',
 
@@ -25,10 +31,10 @@ const Colors = {
   purple2:  '#BCA6FF',
   purple3:  '#DDD6FF',
 
-  grey0:  '#423d34',
-  grey1:  '#90856f',
-  grey2:  '#cbc5b9',
-  grey3:  '#f5f1ea',
+  grey0:  '#383F47',
+  grey1:  '#787F87',
+  grey2:  '#C5CCD3',
+  grey3:  '#EAF0F5',
 
   get text() {
     return this.blue0
@@ -41,6 +47,7 @@ const Colors = {
   get zeros() {
     return [
       this.red0,
+      this.orange0,
       this.yellow0,
       this.green0,
       this.blue0,
@@ -52,6 +59,7 @@ const Colors = {
   get ones() {
     return [
       this.red1,
+      this.orange1,
       this.yellow1,
       this.green1,
       this.blue1,
@@ -63,6 +71,7 @@ const Colors = {
   get twos() {
     return [
       this.red2,
+      this.orange2,
       this.yellow2,
       this.green2,
       this.blue2,
@@ -74,6 +83,7 @@ const Colors = {
   get threes() {
     return [
       this.red3,
+      this.orange3,
       this.yellow3,
       this.green3,
       this.blue3,

@@ -10,19 +10,19 @@ const headerOpacity = 1
 
 const typography = new Typography({
   baseFontSize: "24px",
-  baseLineHeight: 1.2,
+  baseLineHeight: 1.25,
   headerWeight: 700,
   scaleRatio: 2,
   headerFontFamily: [
-    "Verlag Condensed",
+    'Open Sans Condensed', 'sans-serif',
   ],
   bodyFontFamily: [
-    "Verlag",
+    'Commissioner', 'sans-serif'
   ],
   overrideStyles: ({ adjustFontSizeTo, rhythm }, options, styles) => ({
     'h1': {
       opacity: headerOpacity,
-      marginBottom: rhythm(.5),
+      marginBottom: rhythm(1),
       marginTop: rhythm(1.5),
     },
 
@@ -47,26 +47,8 @@ const typography = new Typography({
       color: 'inherit'
     },
 
-    'p>a, *.link': {
-      color: '#777',
-      textDecoration: 'none',
-      borderBottom: '2px solid ' + 'yellow'
-    },
-
-    'p>a': {
-      fontSize: '0.95em'
-    },
-
-    'p>a:hover, *.link:hover': {
-      background: 'yellow',
-      color: '#444',
-      border: '4px solid ' + 'yellow',
-      borderRadius: '4px',
-      position: 'relative',
-      left: '-43px'
-    },
-
     'p': {
+      fontSize: "0.9rem",
       marginBottom: '1rem',
       fontFeatureSettings: `"kern" 1, "liga" 1;`
     }

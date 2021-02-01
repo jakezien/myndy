@@ -44,11 +44,9 @@ module.exports = {
     {
       resolve: 'gatsby-plugin-web-font-loader',
       options: {
-        custom: {
-          families: ['Verlag', 'Verlag Condensed'],
-          urls: ['fonts/fonts.css']
-        },
-        prefixPaths: "true"
+        google: {
+          families: ['Sen:700', 'Open Sans Condensed:700', 'Commissioner']
+        }
       }
     },
 

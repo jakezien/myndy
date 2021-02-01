@@ -10,7 +10,7 @@ const StyledSection = styled.section`
   position: relative;
   z-index: 0;
   text-align: center;
-  color: #0672DD;
+  color: #006FE6;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -26,12 +26,12 @@ const StyledDiv = styled.div`
 `
 
 const StyledH1 = styled.h1`
-  font-family: 'Verlag';
+  font-family: 'Sen', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 2em;
-  margin: 2rem 0 0 0;
+  margin: 1rem 0 0 0;
   line-height: 1;
 `
 
@@ -51,8 +51,8 @@ const HeroSection = () => {
       <Scene/>
       <StyledDiv>
         <StyledH1>Myndy</StyledH1>
-        <StyledH2>mental fitness for womxn</StyledH2>
-        <StyledH4>Focused heart,<br/>Strong mind</StyledH4>
+        <StyledH2>Mental Fitness</StyledH2>
+        {/*<StyledH4>Focused heart,<br/>Strong mind</StyledH4>*/}
       </StyledDiv>
     </StyledSection>
   )
