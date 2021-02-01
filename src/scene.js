@@ -22,6 +22,8 @@ const threes = Colors.threes;
 const warmer = [
   Colors.yellow1,
   Colors.yellow2,
+  Colors.orange1,
+  Colors.orange2,
   Colors.red1,
   Colors.red2,
 ]

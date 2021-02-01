@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 // import { Link } from "gatsby"
 import Scene from "../Scene"
+import Colors from "../colors"
 
 
 const StyledSection = styled.section`
@@ -10,7 +11,7 @@ const StyledSection = styled.section`
   position: relative;
   z-index: 0;
   text-align: center;
-  color: #006FE6;
+  color: ${Colors.blue1};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,9 +30,9 @@ const StyledH1 = styled.h1`
   font-family: 'Sen', sans-serif;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   font-size: 2em;
-  margin: 1rem 0 0 0;
+  margin: .25rem 0;
   line-height: 1;
 `
 
@@ -45,11 +46,18 @@ const StyledH4 = styled.h4`
   margin-top: .5rem;
 `
 
+const StyledImg = styled.img`
+  height: 4em;
+  width: auto;
+  margin-bottom: 0;
+`
+
 const HeroSection = () => {
   return (
     <StyledSection>
       <Scene/>
       <StyledDiv>
+        <StyledImg height='4em' src={'/logo.svg'} alt="Logo" />
         <StyledH1>Myndy</StyledH1>
         <StyledH2>Mental Fitness</StyledH2>
         {/*<StyledH4>Focused heart,<br/>Strong mind</StyledH4>*/}
