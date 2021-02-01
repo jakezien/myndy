@@ -1,7 +1,7 @@
 {
   "name": "Myndy",
   "private": true,
-  "description": "Mental fitness for womxn.",
+  "description": "Mental fitness.",
   "version": "0.1.0",
   "license": "0BSD",
   "scripts": {
