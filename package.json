@@ -7,7 +7,7 @@
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
-    "deploy": "gatsby build && gh-pages -d public --repo https://github.com/jakezien/myndy.git ",
+    "deploy": "gatsby build && gh-pages -d public --repo https://github.com/jakezien/myndy.git",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",

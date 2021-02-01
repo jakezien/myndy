@@ -29,7 +29,7 @@ const StyledSpan = styled.span`
 
 const StyledBigText = styled.p`
   display: block;
-  font-size: 1.3em;
+  font-size: 1.2em;
 `
 
 const InfoSection = () => {

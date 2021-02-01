@@ -6,8 +6,9 @@ import Colors from "../colors"
 
 
 const StyledSection = styled.section`
+  height: 50vh;
   min-height: 440px;
-  height: 60vh;
+  max-height: 960px;
   position: relative;
   z-index: 0;
   text-align: center;
@@ -16,7 +17,7 @@ const StyledSection = styled.section`
   flex-direction: column;
   justify-content: center;
   @media screen and (min-width: 640px) {
-    height: 75vh;
+    height: 65vh;
   }
 `
 
